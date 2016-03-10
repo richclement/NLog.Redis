@@ -1,5 +1,6 @@
 ﻿using System;
 using StackExchange.Redis;
+using System.Collections.Generic;
 
 namespace NLog.Targets
 {
@@ -7,15 +8,14 @@ namespace NLog.Targets
     {
         private ConnectionMultiplexer _connectionMultiplexer;
 
-        private readonly string _host;
+        private readonly List<string> _hosts;
         private readonly int _port;
         private readonly int _db;
         private readonly string _password;
 
-        public RedisConnectionManager(string host, int port, int db, string password)
+        public RedisConnectionManager(List<string> hosts, int db, string password)
         {
-            _host = host;
-            _port = port;
+            _hosts = hosts;
             _db = db;
             _password = password;
 
@@ -32,7 +32,10 @@ namespace NLog.Targets
                     ConnectRetry = 3,
                     KeepAlive = 5
                 };
-            connectionOptions.EndPoints.Add(_host, _port);
+            foreach (var host in _hosts)
+            {
+                connectionOptions.EndPoints.Add(host);
+            }
 
             if (!string.IsNullOrEmpty(_password))
             {

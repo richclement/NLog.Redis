@@ -1,5 +1,6 @@
 ﻿using System;
 using NLog.Config;
+using System.Linq;
 
 namespace NLog.Targets
 {
@@ -10,17 +11,11 @@ namespace NLog.Targets
         protected const string ChannelDataType = "channel";
 
         /// <summary>
-        /// Sets the host name or IP Address of the redis server
+        /// Sets the hosts names or IP Addresses and ports of the redis servers
         /// </summary>
         [RequiredParameter]
-        public string Host { get; set; }
-
-        /// <summary>
-        /// Sets the port number redis is running on
-        /// </summary>
-        [RequiredParameter]
-        public int Port { get; set; }
-
+        public string Hosts { get; set; }
+        
         /// <summary>
         /// Sets the key to be used for either the list or the pub/sub channel in redis
         /// </summary>
@@ -53,7 +48,7 @@ namespace NLog.Targets
         {
             base.InitializeTarget();
 
-            _redisConnectionManager = new RedisConnectionManager(Host, Port, Db, Password);
+            _redisConnectionManager = new RedisConnectionManager(Hosts.Split(',').ToList(), Db, Password);
         }
         
         protected override void CloseTarget()
