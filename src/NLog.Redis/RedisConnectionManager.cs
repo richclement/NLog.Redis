@@ -22,6 +22,17 @@ namespace NLog.Targets
             InitializeConnection();
         }
 
+        [Obsolete("Use constructor with hosts instead")]
+        public RedisConnectionManager(string host, int port, int db, string password)
+        {
+            _hosts = new List<string>();
+            _hosts.Add($"{host}:{port}");
+            _db = db;
+            _password = password;
+
+            InitializeConnection();
+        }
+
         private void InitializeConnection()
         {
             var connectionOptions = new ConfigurationOptions

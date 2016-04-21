@@ -11,9 +11,20 @@ namespace NLog.Targets
         protected const string ChannelDataType = "channel";
 
         /// <summary>
+        /// Sets the host name or IP Address of the redis server
+        /// </summary>
+        [Obsolete("Use hosts instead")]
+        public string Host { get; set; }
+
+        /// <summary>
+        /// Sets the port number redis is running on
+        /// </summary>
+        [Obsolete("Use hosts instead")]
+        public int Port { get; set; }
+
+        /// <summary>
         /// Sets the hosts names or IP Addresses and ports of the redis servers
         /// </summary>
-        [RequiredParameter]
         public string Hosts { get; set; }
         
         /// <summary>
@@ -48,7 +59,12 @@ namespace NLog.Targets
         {
             base.InitializeTarget();
 
-            _redisConnectionManager = new RedisConnectionManager(Hosts.Split(',').ToList(), Db, Password);
+            if (!string.IsNullOrWhiteSpace(Host))
+                _redisConnectionManager = new RedisConnectionManager(Host, Port, Db, Password);
+            else if (!string.IsNullOrWhiteSpace(Hosts))
+                _redisConnectionManager = new RedisConnectionManager(Hosts.Split(',').ToList(), Db, Password);
+            else
+                throw new ArgumentException("At least a host must be set");
         }
         
         protected override void CloseTarget()
