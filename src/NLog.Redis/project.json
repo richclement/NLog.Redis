@@ -1,0 +1,30 @@
+﻿{
+  "version": "1.0.3-*",
+  "title": "NLog.Redis",
+  "description": "NLog target for Redis",
+  "authors": [ "Rich Clement" ],
+
+  "packOptions": {
+    "projectUrl": "https://github.com/richclement/NLog.Redis",
+    "licenseUrl": "https://raw.githubusercontent.com/richclement/NLog.Redis/master/LICENSE",
+    "tags": [ "NLog", "Redis" ]
+  },
+
+  "dependencies": {
+    "NETStandard.Library": "1.6.1",
+    "NLog": "5.0.0-beta03",
+    "StackExchange.Redis": "1.1.608"
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50"
+    },
+    "net45": {}
+  },
+  "scripts": {
+    "postcompile": [
+      "dotnet pack --no-build --configuration Release -o NuGet"
+    ]
+  }
+}
