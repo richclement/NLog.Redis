@@ -9,7 +9,6 @@ namespace NLog.Targets
         private ConnectionMultiplexer _connectionMultiplexer;
 
         private readonly List<string> _hosts;
-        private readonly int _port;
         private readonly int _db;
         private readonly string _password;
 
